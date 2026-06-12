@@ -1,0 +1,284 @@
+<template>
+  <div class="page notify-page">
+    <div class="header">
+      <text class="title">📢 通知</text>
+    </div>
+
+    <div class="content">
+      <div class="notification-list">
+        <div class="notification-item" for="{{notifications}}">
+          <div class="notification-icon">
+            <text class="icon">{{$item.icon}}</text>
+          </div>
+          <div class="notification-body">
+            <text class="notification-title">{{$item.title}}</text>
+            <text class="notification-message">{{$item.message}}</text>
+            <text class="notification-time">{{$item.time}}</text>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" if="{{notifications.length === 0}}">
+        <text class="empty-icon">📭</text>
+        <text class="empty-text">暂无通知</text>
+        <text class="empty-hint">任务完成时会收到通知</text>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="btn btn-back" onclick="goBack">
+        <text class="btn-text">返回</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import fetch from '@system.fetch'
+  import vibrator from '@system.vibrator'
+  import storage from '@system.storage'
+  import router from '@system.router'
+
+  export default {
+    private: {
+      notifications: [],
+      ntfyTopic: '',
+      ntfyServer: 'https://ntfy.sh',
+      pollTimer: null,
+      lastId: null
+    },
+
+    onInit() {
+      this.loadConfig()
+    },
+
+    onReady() {
+      this.startPolling()
+    },
+
+    onDestroy() {
+      this.stopPolling()
+    },
+
+    // 加载配置
+    loadConfig() {
+      storage.get({
+        key: 'ntfy_topic',
+        success: (data) => {
+          this.ntfyTopic = data
+        },
+        fail: (data, code) => {
+          console.log('获取配置失败:', code)
+        }
+      })
+
+      storage.get({
+        key: 'ntfy_server',
+        success: (data) => {
+          if (data) {
+            this.ntfyServer = data
+          }
+        },
+        fail: (data, code) => {
+          console.log('获取服务器配置失败:', code)
+        }
+      })
+    },
+
+    // 开始轮询
+    startPolling() {
+      if (!this.ntfyTopic) {
+        console.log('未配置 ntfy topic，跳过轮询')
+        return
+      }
+
+      this.pollTimer = setInterval(() => {
+        this.pollNotifications()
+      }, 5000)
+
+      // 立即轮询一次
+      this.pollNotifications()
+    },
+
+    // 停止轮询
+    stopPolling() {
+      if (this.pollTimer) {
+        clearInterval(this.pollTimer)
+        this.pollTimer = null
+      }
+    },
+
+    // 轮询通知
+    pollNotifications() {
+      const since = this.lastId ? `since=${this.lastId}` : 'since=30m'
+      const url = `${this.ntfyServer}/${this.ntfyTopic}/json?poll=1&${since}`
+
+      fetch.fetch({
+        url: url,
+        method: 'GET',
+        responseType: 'json',
+        success: (response) => {
+          if (response.data) {
+            try {
+              const messages = JSON.parse(response.data)
+              this.handleNotifications(messages)
+            } catch (e) {
+              console.log('解析通知失败:', e)
+            }
+          }
+        },
+        fail: (data, code) => {
+          console.log('轮询通知失败:', code)
+        }
+      })
+    },
+
+    // 处理通知
+    handleNotifications(messages) {
+      if (!Array.isArray(messages)) {
+        messages = [messages]
+      }
+
+      for (const msg of messages) {
+        if (msg.title && (msg.title.includes('任务完成') || msg.title.includes('任务失败'))) {
+          const notification = {
+            id: msg.id,
+            icon: msg.title.includes('完成') ? '✅' : '❌',
+            title: msg.title,
+            message: msg.message || '',
+            time: new Date(msg.time * 1000).toLocaleString()
+          }
+
+          // 避免重复
+          if (!this.notifications.find(n => n.id === notification.id)) {
+            this.notifications.unshift(notification)
+
+            // 震动提醒
+            vibrator.vibrate()
+          }
+
+          this.lastId = msg.id
+        }
+      }
+    },
+
+    // 返回
+    goBack() {
+      router.back()
+    }
+  }
+</script>
+
+<style>
+  .page {
+    flex-direction: column;
+    background-color: #000000;
+    padding: 20px;
+  }
+
+  .header {
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #4fc3f7;
+  }
+
+  .content {
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .notification-list {
+    flex-direction: column;
+  }
+
+  .notification-item {
+    flex-direction: row;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .notification-icon {
+    width: 50px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+  }
+
+  .icon {
+    font-size: 36px;
+  }
+
+  .notification-body {
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .notification-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 5px;
+  }
+
+  .notification-message {
+    font-size: 24px;
+    color: #cccccc;
+    margin-bottom: 5px;
+  }
+
+  .notification-time {
+    font-size: 20px;
+    color: #888888;
+  }
+
+  .empty-state {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .empty-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+
+  .empty-text {
+    font-size: 32px;
+    color: #ffffff;
+    margin-bottom: 10px;
+  }
+
+  .empty-hint {
+    font-size: 24px;
+    color: #666666;
+  }
+
+  .footer {
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .btn {
+    width: 200px;
+    height: 70px;
+    border-radius: 35px;
+    justify-content: center;
+    align-items: center;
+    background-color: #333333;
+  }
+
+  .btn-text {
+    font-size: 28px;
+    color: #ffffff;
+  }
+</style>

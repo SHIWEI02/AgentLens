@@ -1,0 +1,11 @@
+<script>
+  export default {
+    onCreate() {
+      console.log('AgentLens App Created')
+    },
+
+    onDestroy() {
+      console.log('AgentLens App Destroyed')
+    }
+  }
+</script>

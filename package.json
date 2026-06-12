@@ -1,0 +1,18 @@
+{
+  "name": "AgentLens",
+  "version": "1.0.0",
+  "description": "小米 Watch S5 AI Agent 审批工具 - 通过手表远程审批 Claude Code 危险操作",
+  "engines": {
+    "node": ">=8.10"
+  },
+  "scripts": {
+    "start": "aiot start --watch",
+    "build": "aiot build",
+    "release": "aiot release",
+    "lint": "eslint --format codeframe --fix --ext .ux,.js src/"
+  },
+  "devDependencies": {
+    "@aiot-toolkit/jsc": "^1.0.3",
+    "aiot-toolkit": "^2.0.5"
+  }
+}

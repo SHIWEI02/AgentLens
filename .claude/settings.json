@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /b)",
+      "Bash(npm start *)",
+      "Bash(ls -la \"c:/Users/shiwe/AppData/Roaming/AIoT IDE/\")",
+      "Read(//c/Users/shiwe/AppData/Roaming/AIoT IDE/**)",
+      "Bash(ls -la \"$HOME/.vela/\" 2>/dev/null || echo \"Directory not found\")",
+      "Read(//c/Users/shiwe/.vela/**)",
+      "Bash(mkdir -p \"$HOME/.vela/sdk/skins/builtin/xiaomi_s5\")",
+      "Bash(node create-s5-emulator.js)",
+      "Bash(C:/Users/shiwe/.vela/sdk/tools/adb/win/adb.exe -s emulator-5554 shell pm install /data/quickapp/app/com.swei.watch.agentlens.rpk)",
+      "Bash(C:/Users/shiwe/.vela/sdk/tools/adb/win/adb.exe -s emulator-5554 shell pm uninstall com.swei.watch.agentlens)",
+      "Bash(C:/Users/shiwe/.vela/sdk/tools/adb/win/adb.exe -s emulator-5554 push dist/com.swei.watch.agentlens.debug.1.0.0.rpk /data/app/com.swei.watch.agentlens.rpk)",
+      "Bash(C:/Users/shiwe/.vela/sdk/tools/adb/win/adb.exe -s emulator-5554 shell pm install /data/app/com.swei.watch.agentlens.rpk)",
+      "Bash(C:/Users/shiwe/.vela/sdk/tools/adb/win/adb.exe -s emulator-5554 shell am start com.swei.watch.agentlens)",
+      "Bash(C:/Users/shiwe/.vela/sdk/tools/adb/win/adb.exe devices *)",
+      "Bash(C:/Users/shiwe/.vela/sdk/tools/adb/win/adb.exe -s emulator-5554 logcat)",
+      "Bash(C:/Users/shiwe/.vela/sdk/tools/adb/win/adb.exe -s emulator-5554 shell ps)",
+      "Bash(C:/Users/shiwe/.vela/sdk/tools/adb/win/adb.exe -s emulator-5554 shell ls -la /data/quickapp/app/)",
+      "Bash(C:/Users/shiwe/.vela/sdk/tools/adb/win/adb.exe -s emulator-5554 shell getprop)",
+      "Bash(npx aiot *)",
+      "Bash(tail -20 /c/Users/shiwe/.claude/projects/c--Users-shiwe-Documents-AgentLens-AgentLens/008160c0-bb62-4ecb-ae31-be69ee427c32/tool-results/bu9nw0mlr.txt 2>/dev/null)",
+      "Read(//c/Users/shiwe/.claude/projects/c--Users-shiwe-Documents-AgentLens-AgentLens/008160c0-bb62-4ecb-ae31-be69ee427c32/tool-results/**)",
+      "Bash(pkill -f \"emulator.exe\")",
+      "Bash(pkill -f \"qemu-system-armel\")",
+      "Bash(pkill -f \"node\")",
+      "Bash(tasklist)",
+      "Bash(taskkill //F //IM emulator.exe)",
+      "Bash(taskkill //F //IM qemu-system-armel.exe)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\shiwe\\.vela\\sdk\\skins\\builtin",
+      "c:\\Users\\shiwe\\.vela\\vvd\\Xiaomi_Watch_S5.vvd"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+<template>
+  <div class="splash-page">
+    <div class="image-container">
+      <image if="{{currentIndex === 0}}" src="/common/images/clawd-crab.gif" class="slide-image" />
+      <image if="{{currentIndex === 1}}" src="/common/images/gpt-cat.png" class="slide-image" />
+      <image if="{{currentIndex === 2}}" src="/common/images/hermes_background_removed.png" class="slide-image" />
+    </div>
+    <text class="hint">点击跳过</text>
+  </div>
+</template>
+
+<script>
+  import router from '@system.router'
+
+  export default {
+    private: {
+      currentIndex: 0,
+      switchTimer: null,
+      navigateTimer: null
+    },
+
+    onInit() {
+      console.log('Splash page initialized')
+    },
+
+    onReady() {
+      // 每3秒切换图片
+      this.switchTimer = setInterval(() => {
+        this.currentIndex = (this.currentIndex + 1) % 3
+      }, 3000)
+
+      // 9秒后自动跳转到主页
+      this.navigateTimer = setTimeout(() => {
+        this.navigateToMain()
+      }, 9000)
+    },
+
+    onDestroy() {
+      if (this.switchTimer) {
+        clearInterval(this.switchTimer)
+        this.switchTimer = null
+      }
+      if (this.navigateTimer) {
+        clearTimeout(this.navigateTimer)
+        this.navigateTimer = null
+      }
+    },
+
+    // 跳转到主页面
+    navigateToMain() {
+      router.push({
+        uri: 'pages/approve'
+      })
+    }
+  }
+</script>
+
+<style>
+  .splash-page {
+    flex: 1;
+    background-color: #000000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .image-container {
+    width: 400px;
+    height: 400px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .slide-image {
+    width: 400px;
+    height: 400px;
+    object-fit: contain;
+  }
+
+  .hint {
+    font-size: 24px;
+    color: #888888;
+    margin-top: 50px;
+  }
+</style>

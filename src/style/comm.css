@@ -1,0 +1,164 @@
+/**
+ * 公共样式
+ */
+
+/* 页面基础样式 */
+.page {
+  flex-direction: column;
+  background-color: #000000;
+  padding: 20px;
+  min-height: 100%;
+}
+
+/* 文本样式 */
+.text-white {
+  color: #ffffff;
+}
+
+.text-gray {
+  color: #cccccc;
+}
+
+.text-dark {
+  color: #888888;
+}
+
+.text-primary {
+  color: #4fc3f7;
+}
+
+.text-success {
+  color: #00c853;
+}
+
+.text-danger {
+  color: #ff1744;
+}
+
+.text-warning {
+  color: #ff6b35;
+}
+
+/* 按钮样式 */
+.btn {
+  height: 70px;
+  border-radius: 35px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-primary {
+  background-color: #4fc3f7;
+}
+
+.btn-success {
+  background-color: #00c853;
+}
+
+.btn-danger {
+  background-color: #ff1744;
+}
+
+.btn-warning {
+  background-color: #ff6b35;
+}
+
+.btn-dark {
+  background-color: #333333;
+}
+
+.btn-text {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+/* 卡片样式 */
+.card {
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+/* 输入框样式 */
+.input {
+  height: 60px;
+  background-color: #333333;
+  border-radius: 8px;
+  padding: 0 15px;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+/* 标签样式 */
+.label {
+  font-size: 24px;
+  color: #cccccc;
+}
+
+/* 标题样式 */
+.title {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+/* 分隔线 */
+.divider {
+  height: 1px;
+  background-color: #333333;
+  margin: 15px 0;
+}
+
+/* 徽章样式 */
+.badge {
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+.badge-success {
+  background-color: #00c853;
+}
+
+.badge-danger {
+  background-color: #ff1744;
+}
+
+.badge-warning {
+  background-color: #ff6b35;
+}
+
+/* 加载状态 */
+.loading {
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-text {
+  font-size: 28px;
+  color: #888888;
+}
+
+/* 空状态 */
+.empty-state {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.empty-text {
+  font-size: 32px;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.empty-hint {
+  font-size: 24px;
+  color: #666666;
+}

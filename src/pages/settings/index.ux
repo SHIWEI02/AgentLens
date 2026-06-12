@@ -1,0 +1,172 @@
+<template>
+  <div class="page" onswipe="onSwipe">
+    <div class="header">
+      <text class="title">MQTT</text>
+      <div class="dot {{isConnected ? 'dot-on' : 'dot-off'}}" />
+    </div>
+
+    <div class="row">
+      <text class="label">地址</text>
+      <input class="input" type="text" value="{{mqttHost}}" onchange="onHostChange" placeholder="ip:端口"/>
+    </div>
+
+    <div class="row">
+      <text class="label">账号</text>
+      <input class="input" type="text" value="{{mqttUser}}" onchange="onUserChange" placeholder="用户名"/>
+    </div>
+
+    <div class="row">
+      <text class="label">密码</text>
+      <input class="input" type="text" value="{{mqttPass}}" onchange="onPassChange" placeholder="密码"/>
+    </div>
+
+    <div class="row">
+      <text class="label">主题</text>
+      <input class="input" type="text" value="{{mqttTopic}}" onchange="onTopicChange" placeholder="订阅主题"/>
+    </div>
+
+    <div class="btns">
+      <div class="btn" onclick="testConnection">
+        <text class="btn-text">测试连接</text>
+      </div>
+      <div class="btn btn-save" onclick="saveConfig">
+        <text class="btn-text">保存配置</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import storage from '@system.storage'
+  import router from '@system.router'
+
+  export default {
+    private: {
+      mqttHost: '',
+      mqttUser: '',
+      mqttPass: '',
+      mqttTopic: '',
+      isConnected: false
+    },
+
+    onInit() {
+      this.loadConfig()
+    },
+
+    loadConfig() {
+      storage.get({ key: 'mqtt_host', success: (data) => { this.mqttHost = data || '' } })
+      storage.get({ key: 'mqtt_user', success: (data) => { this.mqttUser = data || '' } })
+      storage.get({ key: 'mqtt_pass', success: (data) => { this.mqttPass = data || '' } })
+      storage.get({ key: 'mqtt_topic', success: (data) => { this.mqttTopic = data || '' } })
+    },
+
+    onHostChange(e) { this.mqttHost = e.value },
+    onUserChange(e) { this.mqttUser = e.value },
+    onPassChange(e) { this.mqttPass = e.value },
+    onTopicChange(e) { this.mqttTopic = e.value },
+
+    testConnection() {
+      if (!this.mqttHost || !this.mqttTopic) {
+        this.isConnected = false
+        return
+      }
+      this.isConnected = true
+    },
+
+    saveConfig() {
+      storage.set({ key: 'mqtt_host', value: this.mqttHost })
+      storage.set({ key: 'mqtt_user', value: this.mqttUser })
+      storage.set({ key: 'mqtt_pass', value: this.mqttPass })
+      storage.set({ key: 'mqtt_topic', value: this.mqttTopic })
+      this.testConnection()
+    },
+
+    onSwipe(evt) {
+      if (evt.direction === 'down') {
+        router.back()
+      }
+    }
+  }
+</script>
+
+<style>
+  .page {
+    flex-direction: column;
+    background-color: #000000;
+    padding: 20px 30px;
+  }
+
+  .header {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .title {
+    font-size: 32px;
+    color: #ffffff;
+    margin-right: 10px;
+  }
+
+  .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+  }
+
+  .dot-on {
+    background-color: #00e676;
+  }
+
+  .dot-off {
+    background-color: #ff1744;
+  }
+
+  .row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .label {
+    width: 60px;
+    font-size: 20px;
+    color: #aaaaaa;
+  }
+
+  .input {
+    flex: 1;
+    height: 44px;
+    background-color: #1a1a1a;
+    border-radius: 22px;
+    padding: 0 16px;
+    font-size: 18px;
+    color: #ffffff;
+    placeholder-color: #666666;
+  }
+
+  .btns {
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+
+  .btn {
+    width: 140px;
+    height: 48px;
+    border-radius: 24px;
+    background-color: #2a2a2a;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-save {
+    background-color: #1a472a;
+  }
+
+  .btn-text {
+    font-size: 20px;
+    color: #cccccc;
+  }
+</style>

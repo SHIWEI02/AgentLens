@@ -1,0 +1,88 @@
+<template>
+  <div class="page" onswipe="onSwipe">
+    <div class="carousel">
+      <image if="{{currentIndex === 0}}" src="/common/images/cc.png" class="img" />
+      <image if="{{currentIndex === 1}}" src="/common/images/codex.png" class="img" />
+      <image if="{{currentIndex === 2}}" src="/common/images/hermes.png" class="img" />
+    </div>
+
+    <div class="dots">
+      <div class="dot {{currentIndex === 0 ? 'active' : ''}}" />
+      <div class="dot {{currentIndex === 1 ? 'active' : ''}}" />
+      <div class="dot {{currentIndex === 2 ? 'active' : ''}}" />
+    </div>
+  </div>
+</template>
+
+<script>
+  import router from '@system.router'
+
+  export default {
+    private: {
+      currentIndex: 0,
+      timer: null
+    },
+
+    onInit() {
+      this.timer = setInterval(() => {
+        this.currentIndex = (this.currentIndex + 1) % 3
+      }, 3000)
+    },
+
+    onDestroy() {
+      if (this.timer) {
+        clearInterval(this.timer)
+      }
+    },
+
+    onSwipe(evt) {
+      if (evt.direction === 'left') {
+        this.currentIndex = (this.currentIndex + 1) % 3
+      } else if (evt.direction === 'right') {
+        this.currentIndex = (this.currentIndex - 1 + 3) % 3
+      } else if (evt.direction === 'up') {
+        router.push({ uri: 'pages/settings' })
+      }
+    }
+  }
+</script>
+
+<style>
+  .page {
+    flex-direction: column;
+    background-color: #000000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .carousel {
+    width: 480px;
+    height: 350px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+  }
+
+  .dots {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 30px;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    background-color: #555555;
+    margin: 0 8px;
+  }
+
+  .active {
+    background-color: #ffffff;
+  }
+</style>
